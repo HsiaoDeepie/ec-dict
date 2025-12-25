@@ -1,0 +1,17 @@
+build
+dist
+venv
+.venv
+*.spec
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+.DS_Store
+thumbs.db
+
+
+.idea
+.vscode
+*.swp
