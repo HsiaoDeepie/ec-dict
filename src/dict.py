@@ -185,7 +185,7 @@ def main():
         print("Written by Hsiao Deepie.")
         sys.exit(0)
     
-    word = sys.argv[1]
+    word = sys.argv[1].lower()
     cli = DictionaryCLI()
     cli.run(word)
 
