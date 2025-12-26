@@ -155,7 +155,6 @@ class DictionaryCLI:
             print(f"dict: {error_msg}")
     
     def run(self, word):
-        """运行主逻辑"""
         # 记录查询的单词到info.log
         self.logger.log_info(f"Query: {word}")
         
@@ -164,12 +163,23 @@ class DictionaryCLI:
         if not word_obj:
             return
         
+        # 输出结果（先展示文本）
+        print(word_obj)
+        
         # 播放美式发音
         if word_obj.usspeech:
+            # 首次自动播放
             self.play_audio(word_obj.usspeech)
-        
-        # 输出结果
-        print(word_obj)
+            
+            # 提示并等待用户输入
+            while True:
+                user_input = input("\n按 'r' 重播发音，按其他任意键退出: ").strip().lower()
+                if user_input == 'r':
+                    self.play_audio(word_obj.usspeech)
+                else:
+                    break
+        else:
+            print("提示: 该单词无可用发音")
 
 
 def main():
