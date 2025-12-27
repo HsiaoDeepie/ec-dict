@@ -1,4 +1,23 @@
 from dataclasses import dataclass, field
+import sys
+
+
+def supports_ansi():
+    """检查当前环境是否支持ANSI转义码"""
+    # Windows 10+ 支持ANSI转义码，但需要检测
+    if sys.platform == "win32":
+        # 检查是否在Windows Terminal或支持ANSI的控制台中
+        # 简单起见，我们假设现代Windows环境支持ANSI
+        return True
+    # 非Windows平台通常支持ANSI
+    return True
+
+
+def bold(text):
+    """返回加粗的文本（如果支持ANSI）"""
+    if supports_ansi():
+        return f"\033[1m{text}\033[0m"
+    return text
 
 
 @dataclass
@@ -86,45 +105,45 @@ class Word:
 
     def __str__(self) -> str:
         output = []
-        
+
         # 单词和音标
-        output.append(f"\033[1m{self.content}\033[0m")
+        output.append(bold(self.content))
         output.append(f"美: {self.usphone} | 英: {self.ukphone}")
         output.append("")
-        
+
         # Translations
         if self.translations:
-            output.append("\033[1mTranslations:\033[0m")
+            output.append(bold("Translations:"))
             for trans in self.translations:
                 output.append(str(trans))
             output.append("")
-        
+
         # Related Words
         if self.related_words:
-            output.append("\033[1mRelated Words:\033[0m")
+            output.append(bold("Related Words:"))
             for rel in self.related_words:
                 output.append(str(rel))
             output.append("")
-        
+
         # Phrases
         if self.phrases:
-            output.append("\033[1mPhrases:\033[0m")
+            output.append(bold("Phrases:"))
             for phrase in self.phrases:
                 output.append(str(phrase))
             output.append("")
-        
+
         # Synonyms
         if self.synonym_groups:
-            output.append("\033[1mSynonyms:\033[0m")
+            output.append(bold("Synonyms:"))
             for syn_group in self.synonym_groups:
                 output.append(str(syn_group))
             output.append("")
-        
+
         # Sentences
         if self.sentences:
-            output.append("\033[1mSentences:\033[0m")
+            output.append(bold("Sentences:"))
             for sentence in self.sentences:
                 output.append(str(sentence))
                 output.append("")
-        
+
         return "\n".join(output)

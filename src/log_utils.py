@@ -11,7 +11,7 @@ class Logger:
         home = os.path.expanduser("~")
         log_dir = os.path.join(home, ".dict", "log")
         os.makedirs(log_dir, exist_ok=True)
-        
+
         self.info_log = os.path.join(log_dir, "info.log")
         self.error_log = os.path.join(log_dir, "error.log")
     

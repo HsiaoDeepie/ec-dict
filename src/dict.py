@@ -109,9 +109,12 @@ class DictionaryCLI:
             
             # 保存原始JSON数据
             home = os.path.expanduser("~")
-            os.makedirs(f"{home}/.dict", exist_ok=True)
-            os.makedirs(f"{home}/.dict/words", exist_ok=True)
-            with open(f"{home}/.dict/words/{word}.json", "w", encoding="utf-8") as f:
+            dict_dir = os.path.join(home, ".dict")
+            words_dir = os.path.join(dict_dir, "words")
+            os.makedirs(dict_dir, exist_ok=True)
+            os.makedirs(words_dir, exist_ok=True)
+            json_file = os.path.join(words_dir, f"{word}.json")
+            with open(json_file, "w", encoding="utf-8") as f:
                 json.dump(data.get("data", {}), f, ensure_ascii=False, indent=2)
             
             return word_obj
