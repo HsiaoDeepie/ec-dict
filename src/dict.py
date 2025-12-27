@@ -8,6 +8,32 @@ import os
 from models import Word, Translation, Headword, RelatedWord, Phrase, SynonymGroup, SynonymItem, Sentence
 from log_utils import Logger
 
+# 获取单个字符（不回显）
+def getch():
+    """读取单个字符，不回显，无需按Enter"""
+    try:
+        # Windows
+        import msvcrt
+        ch = msvcrt.getch()
+        # 尝试解码，如果失败则返回原始字节
+        try:
+            return ch.decode('utf-8')
+        except UnicodeDecodeError:
+            return ch.decode('latin-1')
+    except ImportError:
+        # Unix/Linux/macOS
+        import termios
+        import tty
+
+        fd = sys.stdin.fileno()
+        old_settings = termios.tcgetattr(fd)
+        try:
+            tty.setraw(fd)
+            ch = sys.stdin.read(1)
+        finally:
+            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+        return ch
+
 
 class DictionaryCLI:
     def __init__(self):
@@ -173,14 +199,16 @@ class DictionaryCLI:
         if word_obj.usspeech:
             # 首次自动播放
             self.play_audio(word_obj.usspeech)
-            
+
             # 提示并等待用户输入
+            print("\n按 'r' 重播发音，按 'q' 退出")
             while True:
-                user_input = input("\n按 'r' 重播发音，按其他任意键退出: ").strip().lower()
-                if user_input == 'r':
+                key = getch().lower()
+                if key == 'r':
                     self.play_audio(word_obj.usspeech)
-                else:
+                elif key == 'q':
                     break
+                # 其他按键不做响应
         else:
             print("提示: 该单词无可用发音")
 
